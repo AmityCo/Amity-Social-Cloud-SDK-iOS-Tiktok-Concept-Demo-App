@@ -58,7 +58,7 @@ class CommentManager {
                     }
                     
                     /** Get user model of comment owner **/
-                    let commentOwner = self.userManager.getUserModelByUserID(userID: amityCommentModel.userId)!
+                    let commentOwner = self.userManager.getUserModelByUserID(userID: amityCommentModel.userId, isGetFollowInfo: false)!
                     
                     /** Return mapped comment data from amity model to my model **/
                     return CommentModel(owner: commentOwner,

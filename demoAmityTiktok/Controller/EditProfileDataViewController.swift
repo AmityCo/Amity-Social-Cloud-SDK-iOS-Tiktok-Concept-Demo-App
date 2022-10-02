@@ -44,7 +44,7 @@ class EditProfileDataViewController: UIViewController {
             print("No current logined user data for edit profile then get current logined user from amity again.")
             
             /** Get current logined user data **/
-            userManager.getCurrentLoginedUserModel()
+            userManager.getCurrentLoginedUserModel(isGetFollowInfo: false)
         }
         
         /** Set data to UI **/
@@ -89,18 +89,3 @@ class EditProfileDataViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
 }
-
-//extension EditProfileDataViewController: UserManagerDelegate {
-//    func didSetNewAvatar(newImage: UIImage) {
-//    }
-//
-//    func didGetUserModelByUserID(userModel: UserModel) {
-//    }
-//
-//    func didGetCurrentLoginedUserModel(userModel: UserModel) {
-//    }
-//
-//    func didSearchUserByDisplayName(listUserModel: [UserModel]) {
-//    }
-//
-//}

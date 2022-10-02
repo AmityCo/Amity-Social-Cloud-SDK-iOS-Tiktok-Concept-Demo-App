@@ -47,9 +47,11 @@ class FeedViewController: UIViewController {
         videoFeedCollectionView?.dataSource = self
         videoFeedCollectionView.delegate = self
         videoFeedCollectionView?.register(UINib(nibName: "VideoCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: VideoCollectionViewCell.identifier)
-        
-        /** Load feed **/
-        loadFeed()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        /** Set invalid token for stop observer **/
+        print("Set invalid notification token of feed view controller : FeedManager = .globalfeed")
+        feedManager.setInvalidNotificationToken(typeToken: .globalFeed)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,6 +60,9 @@ class FeedViewController: UIViewController {
         
         /** Set tab bar to show **/
         tabBarController?.tabBar.isHidden = false
+        
+        /** Load feed **/
+        loadFeed()
     }
     
     func loadFeed() {
@@ -91,16 +96,22 @@ extension FeedViewController: VideoCollectionViewCellDelegate {
     /** Go to profile view controller with selected user **/
     func didPressAvatarOrDisplayName(post: PostModel) {
         /** Check selected user isn't current logined user **/
-        if post.owner.userID != userManager.getCurrentLoginedUserModel()?.userID {
+        if post.owner.userID != userManager.getCurrentLoginedUserModel(isGetFollowInfo: false)?.userID {
+            /** Set invalid token of user manager from if statement **/
+            userManager.setInvalidNotificationToken(typeToken: .currentLoginedUser)
+            
             /** Get profile view controller by storyboard id **/
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewController(withIdentifier: "profile") as! ProfileViewController
             
             /** Set user and amity client to comment view controller **/
-//            vc.user = post.owner
             vc.selectedUserID = post.owner.userID
             
+            /** Go to profie view controller by push view controller **/
             navigationController?.pushViewController(vc, animated: true)
+        } else {
+            /** Set invalid token of user manager from if statement **/
+            userManager.setInvalidNotificationToken(typeToken: .currentLoginedUser)
         }
     }
     

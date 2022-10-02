@@ -42,17 +42,28 @@ class ProfileViewController: UIViewController {
         /** Init Manager **/
         userManager = UserManager(amityClient: currentAmityClient, delegate: self)
         feedManager = FeedManager(amityClient: currentAmityClient, delegate: self)
-
+        
+        /** Set delegate **/
+        postOnProfileCollectionView.dataSource = self
+        postOnProfileCollectionView.delegate = self
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        /** Set status bar to default content **/
+//        navigationController?.navigationBar.barStyle = .default
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        
         /** Check selected user profile **/
         if selectedUserID == nil {
             /** Case : press "Me" on tab bar for get current logined user profile **/
+            print(#"Case : press "Me" on tab bar for get current logined user profile"#)
             /** Set user profile to current logined user **/
-            user = userManager.getCurrentLoginedUserModel()
+            user = userManager.getCurrentLoginedUserModel(isGetFollowInfo: true)
 
             /** Set follow button to hidden **/
             followButton.isHidden = true
         } else {
             /** Case : press avatar or displayname on video post or comment for get other user profile **/
+            print(#"Case : press avatar or displayname on video post or comment for get other user profile"#)
             /** Set edit profile button to hidden **/
             editProfileButton.isHidden = true
 
@@ -60,15 +71,11 @@ class ProfileViewController: UIViewController {
             tabBarController?.tabBar.isHidden = true
 
             /** Get user model for update follow info **/
-            user = userManager.getUserModelByUserID(userID: selectedUserID)
+            user = userManager.getUserModelByUserID(userID: selectedUserID, isGetFollowInfo: true)
 
             /** Set follow button **/
             userManager.checkCurrentLoginedUserIsFollowUser(otherUserID: selectedUserID)
         }
-        
-        /** Set delegate **/
-        postOnProfileCollectionView.dataSource = self
-        postOnProfileCollectionView.delegate = self
         
         /** Get post of user **/
         feedManager.queryFeedByUserID(selectedUserID ?? user.userID)
@@ -76,10 +83,15 @@ class ProfileViewController: UIViewController {
         /** Set user profile data to UI **/
         setUserProfileDataToUI()
     }
-    override func viewWillAppear(_ animated: Bool) {
-        /** Set status bar to default content **/
-//        navigationController?.navigationBar.barStyle = .default
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        /** Set invalid token for stop observer **/
+        print("Set invalid notification token of profile view controller : UserManager = currentLoginedUser, otheruser, checkFollowStatus | FeedManager = otherUserFeed")
+        userManager.setInvalidNotificationToken(typeToken: .currentLoginedUser)
+        userManager.setInvalidNotificationToken(typeToken: .otheruser)
+        userManager.setInvalidNotificationToken(typeToken: .checkFollowStatus)
+        userManager.setInvalidNotificationToken(typeToken: .userFollowInfo)
+        feedManager.setInvalidNotificationToken(typeToken: .otherUserFeed)
     }
     
     @IBAction func followPressed(_ sender: UIButton) {
@@ -174,15 +186,13 @@ extension ProfileViewController: FeedManagerDelegate {
     
     func didQueryFeedByUserID(listPostModel: [PostModel]) {
         listPostOfUser = listPostModel
-        
         postOnProfileCollectionView.reloadData()
     }
 }
 
 extension ProfileViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return listPostOfUser.count
-        return 0
+        return listPostOfUser.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -190,7 +200,6 @@ extension ProfileViewController: UICollectionViewDataSource {
         let postData = listPostOfUser[indexPath.row]
         Alamofire.request(postData.thumbnailPathURL!).responseImage { response in
             if case .success(let image) = response.result {
-                print("Set thumbnail \(image)")
                 cell.contentView.addSubview(UIImageView(image: image))
             }
         }

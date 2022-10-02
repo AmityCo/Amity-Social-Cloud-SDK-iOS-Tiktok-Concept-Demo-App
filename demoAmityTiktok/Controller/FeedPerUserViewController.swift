@@ -50,8 +50,6 @@ class FeedPerUserViewController: UIViewController {
         videoFeedCollectionView.delegate = self
         videoFeedCollectionView.register(UINib(nibName: "VideoCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: VideoCollectionViewCell.identifier)
         
-        /** Load feed **/
-        loadFeed()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,6 +58,9 @@ class FeedPerUserViewController: UIViewController {
         
         /** Set tab bar to show **/
         tabBarController?.tabBar.isHidden = false
+        
+        /** Load feed **/
+        loadFeed()
     }
     
     func loadFeed() {
@@ -93,7 +94,7 @@ extension FeedPerUserViewController: VideoCollectionViewCellDelegate {
     /** Go to profile view controller with selected user **/
     func didPressAvatarOrDisplayName(post: PostModel) {
         /** Check selected user isn't current logined user **/
-        if post.owner.userID != userManager.getCurrentLoginedUserModel()?.userID {
+        if post.owner.userID != userManager.getCurrentLoginedUserModel(isGetFollowInfo: false)?.userID {
             /** Get profile view controller by storyboard id **/
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewController(withIdentifier: "profile") as! ProfileViewController

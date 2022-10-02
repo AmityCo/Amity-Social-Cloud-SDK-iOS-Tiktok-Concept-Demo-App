@@ -47,7 +47,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
-//        super.prepareForReuse()
+        postModel = nil
         videoView.layer.sublayers?.forEach({ $0.removeFromSuperlayer() })
     }
     

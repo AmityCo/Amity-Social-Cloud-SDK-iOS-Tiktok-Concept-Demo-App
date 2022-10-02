@@ -43,7 +43,7 @@ class EditProfileViewController: UIViewController {
         }
         
         /** Get current logined user data **/
-        user = userManager.getCurrentLoginedUserModel()
+        user = userManager.getCurrentLoginedUserModel(isGetFollowInfo: false)
 
         /** Set delegate **/
         profileDataTableView.dataSource = self
@@ -101,7 +101,7 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
             userManager.setNewAvatar(imagePathURL: newAvatarImagePathURL)
             
             /** Set new avatar to UI **/
-            user = userManager.getCurrentLoginedUserModel()
+            user = userManager.getCurrentLoginedUserModel(isGetFollowInfo: false)
             setProfileDataToUI()
         }
     }

@@ -136,9 +136,7 @@
 				E52BF4D828E986210093BE62 /* AppDelegate.swift */,
 				E52BF4DA28E986210093BE62 /* SceneDelegate.swift */,
 				E52BF4EF28E987550093BE62 /* Utilities.swift */,
-				E52BF4DE28E986210093BE62 /* Main.storyboard */,
 				E52BF4E128E986230093BE62 /* Assets.xcassets */,
-				E52BF4E328E986230093BE62 /* LaunchScreen.storyboard */,
 				E52BF4E628E986230093BE62 /* Info.plist */,
 			);
 			name = demoAmityTiktok;
@@ -159,6 +157,8 @@
 		E52BF4ED28E9867F0093BE62 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				E52BF4DE28E986210093BE62 /* Main.storyboard */,
+				E52BF4E328E986230093BE62 /* LaunchScreen.storyboard */,
 				E52BF51028E989930093BE62 /* CommentTableViewCell.swift */,
 				E52BF50E28E989930093BE62 /* CommentTableViewCell.xib */,
 				E52BF50C28E989930093BE62 /* ProfileDataTableViewCell.swift */,

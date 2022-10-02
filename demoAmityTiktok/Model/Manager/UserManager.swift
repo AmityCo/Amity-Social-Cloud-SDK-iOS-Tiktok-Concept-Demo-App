@@ -12,7 +12,13 @@ class UserManager {
     var client: AmityClient?
     var userRepository: AmityUserRepository!
     var fileRepository: AmityFileRepository!
-    private var tokenResult: [AmityNotificationToken] = []
+    private var subscriptionManager: AmityTopicSubscription!
+    private var currentLoginedUserTokenResult: AmityNotificationToken!
+    private var otheruserTokenResult: AmityNotificationToken!
+    private var myFollowInfo: AmityObject<AmityMyFollowInfo>!
+    private var userFollowInfoTokenResult: AmityNotificationToken!
+    private var searchUserTokenResult: AmityNotificationToken!
+    private var checkFollowStatusTokenResult: AmityNotificationToken!
     
     var delegate: UserManagerDelegate!
     
@@ -20,29 +26,30 @@ class UserManager {
         self.client = amityClient
         self.userRepository = AmityUserRepository(client: amityClient)
         self.fileRepository = AmityFileRepository(client: amityClient)
+        self.subscriptionManager = AmityTopicSubscription(client: amityClient)
         self.delegate = delegate
     }
     
-    func getCurrentLoginedUserModel() -> UserModel? {
+    func getCurrentLoginedUserModel(isGetFollowInfo: Bool) -> UserModel? {
         /** Get current logined user by client **/
         if let amityUserModelLiveObj = client?.currentUser {
             /** Add observer when current logined user updated **/
             if delegate != nil {
-                tokenResult.append(amityUserModelLiveObj.observe({ amityUserObj, error in
-                    print("Trigger updated from amityUserModelLiveObj observer -> update new amity user model to viewcontroller")
+                currentLoginedUserTokenResult = amityUserModelLiveObj.observeOnce({ amityUserObj, error in
+                    print(#"Trigger updated from amityUserModelLiveObj observer of function "getCurrentLoginedUserModel" -> update new amity user model to viewcontroller"#)
                     if let amityUserModel = amityUserObj.object {
                         /** Map data to user model **/
                         let newUserModel = self.mapDataToUserModel(amityUserModel: amityUserModel)
                         
                         /** Set observer for get following/follower data if delegate is profile view controller **/
-                        if let profileViewController = self.delegate as? ProfileViewController {
+                        if self.delegate is ProfileViewController && isGetFollowInfo {
                             self.getFollowInfo(of: amityUserModel.userId)
                         }
                         
                         /** Send user model to delegate **/
                         self.delegate.didGetCurrentLoginedUserModel(userModel: newUserModel)
                     }
-                }))
+                })
             }
 
             /** Return current logined user model **/
@@ -51,7 +58,7 @@ class UserManager {
                 let newUserModel = self.mapDataToUserModel(amityUserModel: amityUserModel)
                 
                 /** Set observer for get following/follower data if delegate is profile view controller **/
-                if let profileViewController = delegate as? ProfileViewController {
+                if self.delegate is ProfileViewController && isGetFollowInfo {
                     self.getFollowInfo(of: amityUserModel.userId)
                 }
                 
@@ -63,26 +70,26 @@ class UserManager {
         return nil
     }
     
-    func getUserModelByUserID(userID: String) -> UserModel? {
+    func getUserModelByUserID(userID: String, isGetFollowInfo: Bool) -> UserModel? {
         /** Get user by user ID in Amity **/
         let resultAmityUserModel = userRepository.getUser(userID)
         
         /** Add observer when other user updated **/
         if delegate != nil {
-            tokenResult.append(resultAmityUserModel.observe { amityUserObj, error in
+            otheruserTokenResult = resultAmityUserModel.observe { amityUserObj, error in
                 if let amityUserModel = amityUserObj.object {
                     /** Map data to user model **/
                     let newUserModel = self.mapDataToUserModel(amityUserModel: amityUserModel)
                     
                     /** Set observer for get following/follower data if delegate is profile view controller **/
-                    if let profileViewController = self.delegate as? ProfileViewController {
+                    if self.delegate is ProfileViewController && isGetFollowInfo {
                         self.getFollowInfo(of: amityUserModel.userId)
                     }
                     
                     /** Send user model to delegate **/
                     self.delegate.didGetUserModelByUserID(userModel: newUserModel)
                 }
-            })
+            }
         }
         
         /** Return user model **/
@@ -91,7 +98,7 @@ class UserManager {
             let newUserModel = self.mapDataToUserModel(amityUserModel: amityUserModel)
             
             /** Set observer for get following/follower data if delegate is profile view controller **/
-            if let profileViewController = delegate as? ProfileViewController {
+            if self.delegate is ProfileViewController && isGetFollowInfo {
                 self.getFollowInfo(of: amityUserModel.userId)
             }
             
@@ -114,6 +121,7 @@ class UserManager {
     }
     
     private func getFollowInfo(of userID: String?) {
+        /** Prepare value for get follow info **/
         let followManager = userRepository.followManager
         var amountFollower = 0
         var amountFollowing = 0
@@ -121,7 +129,7 @@ class UserManager {
         if let otherUserID = userID {
             /** Case : Get follow info of other user ID **/
             let otherUserFollowInfo = followManager.getUserFollowInfo(withUserId: otherUserID)
-            tokenResult.append(otherUserFollowInfo.observe({ amityUserFollowInfo, error in
+            userFollowInfoTokenResult = otherUserFollowInfo.observe({ amityUserFollowInfo, error in
                 /** Check error and get follow info**/
                 if let currentError = error {
                     print(currentError.localizedDescription)
@@ -133,12 +141,31 @@ class UserManager {
                 
                 /** Send follow info to view controller  and update to model by delegate **/
                 self.delegate.didGetFollowInfo(amountFollowing: amountFollowing, amountFollower: amountFollower)
-            }))
+            })
             
         } else {
+            /** Set subscription of my follow info **/
+            print("Set subscription of my follow info")
+            let myFollowerTopic = AmityFollowTopic(event: .myFollowers)
+            let myFollowingTopic = AmityFollowTopic(event: .myFollowing)
+            subscriptionManager.subscribeTopic(myFollowerTopic) { isSuccess, error in
+                if let currentError = error {
+                    print(currentError.localizedDescription)
+                } else {
+                    print("Start get my follower realtime success : \(isSuccess)")
+                }
+            }
+            subscriptionManager.subscribeTopic(myFollowingTopic) { isSuccess, error in
+                if let currentError = error {
+                    print(currentError.localizedDescription)
+                } else {
+                    print("Start get my following realtime success : \(isSuccess)")
+                }
+            }
+            
             /** Case : Get follow info of mine **/
-            let myFollowInfo = followManager.getMyFollowInfo()
-            tokenResult.append(myFollowInfo.observe({ amityMyFollowInfo, error in
+            myFollowInfo = followManager.getMyFollowInfo()
+            userFollowInfoTokenResult = myFollowInfo.observe({ amityMyFollowInfo, error in
                 /** Check error and get follow info**/
                 if let currentError = error {
                     print(currentError.localizedDescription)
@@ -150,7 +177,7 @@ class UserManager {
                 
                 /** Send follow info to view controller  and update to model by delegate **/
                 self.delegate.didGetFollowInfo(amountFollowing: amountFollowing, amountFollower: amountFollower)
-            }))
+            })
         }
     }
      
@@ -173,7 +200,7 @@ class UserManager {
 
     func searchUserByDisplayName(_ displayName: String) {
         print(#"Start search users by display name -> "\#(displayName)""#)
-        tokenResult.append(userRepository.searchUser(displayName, sortBy: .displayName).observe({ amityUserModelCollection, change, error in
+        searchUserTokenResult = userRepository.searchUser(displayName, sortBy: .displayName).observe({ amityUserModelCollection, change, error in
             print(#"Search users by display name -> "\#(displayName)" Completed"#)
             if let currentError = error {
                 print(currentError.localizedDescription)
@@ -189,7 +216,7 @@ class UserManager {
                     self.delegate.didSearchUserByDisplayName(listUserModel: listFoundedUserModel)
                 }
             }
-        }))
+        })
     }
     
     func setNewAvatar(imagePathURL: URL) {
@@ -260,6 +287,7 @@ class UserManager {
                 } else {
                     print("Follow user ID : \(otherUserID) success : \(isSuccess)")
                     self.delegate.didFollowOrUnFollowUser(isFollow: true)
+                    self.getFollowInfo(of: otherUserID)
                 }
             }
         } else {
@@ -269,6 +297,7 @@ class UserManager {
                 } else {
                     print("Unfollow user ID : \(otherUserID) success : \(isSuccess)")
                     self.delegate.didFollowOrUnFollowUser(isFollow: false)
+                    self.getFollowInfo(of: otherUserID)
                 }
             }
         }
@@ -279,8 +308,7 @@ class UserManager {
         let myFollowing = followerManger.getMyFollowingList(with: .accepted)
         var isFollow = false
         
-        print("checkCurrentLoginedUserIsFollowUser \(otherUserID)")
-        tokenResult.append(myFollowing.observe { amityFollowRelationShipCollection, change, error in
+        checkFollowStatusTokenResult = myFollowing.observe { amityFollowRelationShipCollection, change, error in
             let listAmityFollowRelationShip = amityFollowRelationShipCollection.allObjects()
             for data in listAmityFollowRelationShip {
                 if data.targetUserId == otherUserID {
@@ -289,27 +317,32 @@ class UserManager {
             }
             
             self.delegate.didCheckCurrentLoginedUserIsFollowUser(isFollow: isFollow)
-        })
+        }
     }
     
-    func autoAcceptAllFollowingRequest() {
-        let followManager = userRepository.followManager
-        let myFollowing = followManager.getMyFollowingList(with: .pending)
-        
-        tokenResult.append(myFollowing.observe({ amityFollowRelationshipCollection, change, error in
-            let listFollowRelationShip = amityFollowRelationshipCollection.allObjects()
-            for relationship in listFollowRelationShip {
-                print("User ID \(relationship.targetUserId) following request to you")
-                followManager.acceptUserRequest(withUserId: relationship.targetUserId) { isSuccess, response, error in
-                    if let currentError = error {
-                        print(currentError.localizedDescription)
-                    } else {
-                        print("Auto accept user ID \(relationship.targetUserId) following request success : \(isSuccess)")
-                    }
-                }
-            }
-        }))
+    func setInvalidNotificationToken(typeToken: typeTokenOfUserManager) {
+        switch typeToken {
+        case .currentLoginedUser:
+            currentLoginedUserTokenResult = nil
+        case .otheruser:
+            otheruserTokenResult = nil
+        case .userFollowInfo:
+            myFollowInfo = nil
+            userFollowInfoTokenResult = nil
+        case .searchUser:
+            searchUserTokenResult = nil
+        case .checkFollowStatus:
+            checkFollowStatusTokenResult = nil
+        }
     }
+}
+
+enum typeTokenOfUserManager {
+    case currentLoginedUser
+    case otheruser
+    case userFollowInfo
+    case searchUser
+    case checkFollowStatus
 }
 
 protocol UserManagerDelegate {

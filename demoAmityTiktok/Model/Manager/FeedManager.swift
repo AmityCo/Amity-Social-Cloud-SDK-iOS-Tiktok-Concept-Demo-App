@@ -17,7 +17,8 @@ class FeedManager {
     private var feedRepository: AmityFeedRepository
     private var reactionRepository: AmityReactionRepository
     private let staticCommunityID: String = "62c68c9cba28b100d9a3213a"
-    private var tokenResult: [AmityNotificationToken] = []
+    private var globalFeedTokenResult: AmityNotificationToken!
+    private var otherUserFeedTokenResult: AmityNotificationToken!
     
     init(amityClient: AmityClient, delegate: FeedManagerDelegate?) {
         self.client = amityClient
@@ -30,58 +31,7 @@ class FeedManager {
     }
     
     func queryGlobalFeed() {
-//                let postQueryOption = AmityPostQueryOptions(
-//                    targetType: .community,
-//                    targetId: staticCommunityID,
-//                    sortBy: .lastCreated,
-//                    deletedOption: .notDeleted,
-//                    filterPostTypes: ["video"])
-//
-//                tokenResult.append(postRepository.getPosts(postQueryOption).observe({ postAmityCollection, collectionChange, error in
-//                    let listAmityPostModel = postAmityCollection.allObjects()
-//                    print("Query global feed on community ID : \(self.staticCommunityID) count : \(listAmityPostModel.count)")
-//
-//                    let listPostModel: [PostModel] = listAmityPostModel.map { amityPostModel in
-//                        /** Get current logined user reaction to this comment **/
-//                        var currentLoginedUserisLiked = false
-//                        if amityPostModel.myReactions.contains("like") {
-//                            currentLoginedUserisLiked = true
-//                        }
-//
-//                        /** Get amount like reaction **/
-//                        var amountLike: Int = 0
-//                        if let likeReactionOfPost = amityPostModel.reactions?["like"] as? Int {
-//                            amountLike = likeReactionOfPost
-//                        }
-//
-//                        /** Get caption **/
-//                        var caption = "<no caption>"
-//                        if let currentCaption = amityPostModel.data?["text"] as? String {
-//                            caption = currentCaption
-//                        }
-//
-//                        /** Get video post data**/
-//                        let videoPostData = amityPostModel.getVideoInfo()
-//
-//                        /** Get user model of post owner **/
-//                        let postOwner = self.userManager.getUserModelByUserID(userID: amityPostModel.postedUserId)!
-//
-//                        return PostModel(
-//                            owner: postOwner,
-//                            postId: amityPostModel.postId,
-//                            caption: caption,
-//                            amityVideoData: videoPostData,
-//                            reactionsCount: amountLike,
-//                            commentsCount: Int(amityPostModel.commentsCount),
-//                            isLiked: currentLoginedUserisLiked)
-//                    }
-//
-//                    DispatchQueue.main.async {
-//                        self.delegate?.didQueryGlobalFeed(listPostModel: listPostModel)
-//                    }
-//                }))
-        
-        tokenResult.append(feedRepository.getGlobalFeed().observe { postAmityCollection, collectionChange, error in
+        globalFeedTokenResult = feedRepository.getGlobalFeed().observe { postAmityCollection, collectionChange, error in
             /** Get amity post model **/
             let listAmityPostModel = postAmityCollection.allObjects()
             print("Query all global feed count : \(listAmityPostModel.count)")
@@ -117,7 +67,7 @@ class FeedManager {
                 }
                 
                 /** Get user model of post owner **/
-                let postOwner = self.userManager.getUserModelByUserID(userID: amityPostModel.postedUserId)!
+                let postOwner = self.userManager.getUserModelByUserID(userID: amityPostModel.postedUserId, isGetFollowInfo: false)!
                 
                 return PostModel(
                     owner: postOwner,
@@ -137,81 +87,82 @@ class FeedManager {
             
             /** Send list post model to view controller **/
             self.delegate?.didQueryGlobalFeed(listPostModel: listPostModel)
-        })
-        
+        }
     }
     
     func queryFeedByUserID(_ userID: String) {
-        let queryPostOption = AmityPostQueryOptions(
-            targetType: .user,
-            targetId: userID,
-            sortBy: .lastCreated,
-            deletedOption: .notDeleted,
-            filterPostTypes: nil)
-        
-        tokenResult.append(postRepository.getPosts(queryPostOption).observe { amityPostCollection, change, error in
-            if let currentError = error {
-                print(currentError.localizedDescription)
-            } else {
-                /** Get amity post model **/
-                let listAmityPostModel = amityPostCollection.allObjects()
-                print("Query global feed on USER ID : \(userID) count : \(listAmityPostModel.count)")
-                
-                /** Map data to post model **/
-                var listPostModel: [PostModel] = listAmityPostModel.map { amityPostModel in
-                    /** Get current logined user reaction to this comment **/
-                    var currentLoginedUserisLiked = false
-                    if amityPostModel.myReactions.contains("like") {
-                        currentLoginedUserisLiked = true
+        /** Get user model of post owner **/
+        if let postOwner = userManager.getUserModelByUserID(userID: userID, isGetFollowInfo: false) {
+            /** Set query post option **/
+            let queryPostOption = AmityPostQueryOptions(
+                targetType: .user,
+                targetId: userID,
+                sortBy: .lastCreated,
+                deletedOption: .notDeleted,
+                filterPostTypes: nil)
+            
+            /** Get post by query post option and set observer **/
+            otherUserFeedTokenResult = postRepository.getPosts(queryPostOption).observe { amityPostCollection, change, error in
+                if let currentError = error {
+                    print(currentError.localizedDescription)
+                } else {
+                    /** Get amity post model **/
+                    let listAmityPostModel = amityPostCollection.allObjects()
+                    print(#"Query post of USER ID "\#(userID)" count : \#(listAmityPostModel.count)"#)
+                    
+                    /** Map data to post model **/
+                    var listPostModel: [PostModel] = listAmityPostModel.map { amityPostModel in
+                        /** Get current logined user reaction to this comment **/
+                        var currentLoginedUserisLiked = false
+                        if amityPostModel.myReactions.contains("like") {
+                            currentLoginedUserisLiked = true
+                        }
+
+                        /** Get amount like reaction **/
+                        var amountLike: Int = 0
+                        if let likeReactionOfPost = amityPostModel.reactions?["like"] as? Int {
+                            amountLike = likeReactionOfPost
+                        }
+
+                        /** Get caption **/
+                        var caption = "<no caption>"
+                        if let currentCaption = amityPostModel.data?["text"] as? String {
+                            caption = currentCaption
+                        }
+
+                        /** Get video post data**/
+                        let videoPostData = amityPostModel.getVideoInfo()
+
+                        /** Get thumbnail of video **/
+                        var thumbnailPathID: String = ""
+                        if let thumbnailVideoInfo = amityPostModel.data?["thumbnailFileId"] as? String {
+                            thumbnailPathID = thumbnailVideoInfo
+                        }
+
+                        return PostModel(
+                            owner: postOwner,
+                            postId: amityPostModel.postId,
+                            caption: caption,
+                            amityVideoData: videoPostData,
+                            thumbnailPathURL: "https://api.sg.amity.co/api/v3/files/\(thumbnailPathID)/download?size=medium",
+                            reactionsCount: amountLike,
+                            commentsCount: Int(amityPostModel.commentsCount),
+                            isLiked: currentLoginedUserisLiked)
                     }
-
-                    /** Get amount like reaction **/
-                    var amountLike: Int = 0
-                    if let likeReactionOfPost = amityPostModel.reactions?["like"] as? Int {
-                        amountLike = likeReactionOfPost
-                    }
-
-                    /** Get caption **/
-                    var caption = "<no caption>"
-                    if let currentCaption = amityPostModel.data?["text"] as? String {
-                        caption = currentCaption
-                    }
-
-                    /** Get video post data**/
-                    let videoPostData = amityPostModel.getVideoInfo()
-
-                    /** Get thumbnail of video **/
-                    var thumbnailPathID: String = ""
-                    if let thumbnailVideoInfo = amityPostModel.data?["thumbnailFileId"] as? String {
-                        thumbnailPathID = thumbnailVideoInfo
-                    }
-
-                    /** Get user model of post owner **/
-                    let postOwner = self.userManager.getUserModelByUserID(userID: amityPostModel.postedUserId)!
-
-                    return PostModel(
-                        owner: postOwner,
-                        postId: amityPostModel.postId,
-                        caption: caption,
-                        amityVideoData: videoPostData,
-                        thumbnailPathURL: "https://api.sg.amity.co/api/v3/files/\(thumbnailPathID)/download?size=medium",
-                        reactionsCount: amountLike,
-                        commentsCount: Int(amityPostModel.commentsCount),
-                        isLiked: currentLoginedUserisLiked)
+                    
+                    /** Filter post to video only **/
+                    listPostModel = listPostModel.filter({ postModel in
+                        return postModel.amityVideoData != nil
+                    })
+                    print(#"Filtered video post of USER ID "\#(userID)" count : \#(listPostModel.count)"#)
+                    
+                    /** Send list post model to view controller **/
+                    self.delegate.didQueryFeedByUserID(listPostModel: listPostModel)
                 }
-                
-                /** Filter post to video only **/
-                listPostModel = listPostModel.filter({ postModel in
-                    return postModel.amityVideoData != nil
-                })
-                print("Filtered video global feed count : \(listPostModel.count)")
-                
-                /** Send list post model to view controller **/
-                self.delegate.didQueryFeedByUserID(listPostModel: listPostModel)
             }
-        })
-        
-        
+        } else {
+            print("Error get post by user id : user id not found")
+        }
     }
     
     func createNewVideoPost(videoPathURL: URL, caption: String) {
@@ -234,7 +185,7 @@ class FeedManager {
             videoPostBuilder.setVideos([recentUploadAmityVideoData!])
             
             /** Get current logined user **/
-            let currentLoginedUser = self.userManager.getCurrentLoginedUserModel()
+            let currentLoginedUser = self.userManager.getCurrentLoginedUserModel(isGetFollowInfo: false)
             
             /** Create post with post builder **/
             self.postRepository.createPost(videoPostBuilder, targetId: currentLoginedUser?.userID, targetType: .user) { amityPost, error in
@@ -269,6 +220,20 @@ class FeedManager {
             }
         }
     }
+    
+    func setInvalidNotificationToken(typeToken: typeTokenOfFeedManager) {
+        switch typeToken {
+        case .globalFeed:
+            globalFeedTokenResult = nil
+        case .otherUserFeed:
+            otherUserFeedTokenResult = nil
+        }
+    }
+}
+
+enum typeTokenOfFeedManager {
+    case globalFeed
+    case otherUserFeed
 }
 
 protocol FeedManagerDelegate {
