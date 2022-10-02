@@ -20,6 +20,7 @@ class FeedPerUserViewController: UIViewController {
     private var feedManager: FeedManager!
     private var userManager: UserManager!
     var user: UserModel!
+    var selectedCellIndexFromProfile: IndexPath!
     
     private var doubleTapAction: UITapGestureRecognizer!
     
@@ -52,28 +53,44 @@ class FeedPerUserViewController: UIViewController {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        /** Set invalid token for stop observer **/
+        print("Set invalid notification token of feed per user view controller : FeedManager = .otherUserFeed")
+        feedManager.setInvalidNotificationToken(typeToken: .otherUserFeed)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         /** Set status bar to light content **/
         navigationController?.navigationBar.barStyle = .black
-        
-        /** Set tab bar to show **/
-        tabBarController?.tabBar.isHidden = false
         
         /** Load feed **/
         loadFeed()
     }
     
-    func loadFeed() {
+    private func loadFeed() {
         /** Query global video feed **/
         feedManager.queryFeedByUserID(user.userID)
+    }
+    
+    private func goToPostSelected() {
+        if videoFeeds.count > 0 {
+            videoFeedCollectionView.scrollToItem(at: selectedCellIndexFromProfile, at: .top, animated: false)
+        }
     }
     
 }
 
 extension FeedPerUserViewController: FeedManagerDelegate {
     func didQueryFeedByUserID(listPostModel: [PostModel]) {
+        /** Set new video feeds **/
         videoFeeds = listPostModel
+        
+        /** Reload collection view for update data**/
         videoFeedCollectionView.reloadData()
+
+        /** Go to cell selected by index path **/
+        goToPostSelected()
+            
     }
     
     func didQueryGlobalFeed(listPostModel: [PostModel]) {}
@@ -91,22 +108,6 @@ extension FeedPerUserViewController: UserManagerDelegate {
 }
 
 extension FeedPerUserViewController: VideoCollectionViewCellDelegate {
-    /** Go to profile view controller with selected user **/
-    func didPressAvatarOrDisplayName(post: PostModel) {
-        /** Check selected user isn't current logined user **/
-        if post.owner.userID != userManager.getCurrentLoginedUserModel(isGetFollowInfo: false)?.userID {
-            /** Get profile view controller by storyboard id **/
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "profile") as! ProfileViewController
-            
-            /** Set user and amity client to comment view controller **/
-            vc.user = post.owner
-            vc.currentAmityClient = currentAmityClient
-            
-            navigationController?.pushViewController(vc, animated: true)
-        }
-    }
-    
     /** Show comment view **/
     func didPressCommentButton(postID: String) {
         
@@ -141,6 +142,9 @@ extension FeedPerUserViewController: VideoCollectionViewCellDelegate {
             vc.view.frame.origin.y = UIScreen.main.bounds.height * 0.25
         }) { finished in }
     }
+    
+    /** Don't use **/
+    func didPressAvatarOrDisplayName(post: PostModel) {}
 }
 
 extension FeedPerUserViewController: CommentViewControllerDelegate {

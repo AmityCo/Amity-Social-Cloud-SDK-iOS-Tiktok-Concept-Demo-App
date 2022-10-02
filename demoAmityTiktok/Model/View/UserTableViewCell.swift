@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Alamofire
+import AlamofireImage
 
 class UserTableViewCell: UITableViewCell {
 
@@ -17,9 +19,6 @@ class UserTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        /** Set custom avatar design **/
-        avatar.layer.cornerRadius = avatar.frame.width / 2
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -35,9 +34,15 @@ class UserTableViewCell: UITableViewCell {
         if let user = userModel {
             displaynameLabel.text = user.displayname
             userIDLabel.text = "@\(user.userID)"
-            if let avatarUser = user.avatar {
-                avatar.image = avatarUser
+            
+            Alamofire.request(user.avatarFileURL).responseImage { response in
+                if case .success(let image) = response.result {
+                    self.avatar.image = image
+                    self.avatar.layer.cornerRadius = self.avatar.frame.width / 2
+                    self.avatar.clipsToBounds = true
+                }
             }
+            
         }
     }
     

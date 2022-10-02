@@ -31,9 +31,9 @@ class FeedManager {
     }
     
     func queryGlobalFeed() {
-        globalFeedTokenResult = feedRepository.getGlobalFeed().observe { postAmityCollection, collectionChange, error in
+        globalFeedTokenResult = feedRepository.getGlobalFeed().observe { amityPostCollection, collectionChange, error in
             /** Get amity post model **/
-            let listAmityPostModel = postAmityCollection.allObjects()
+            let listAmityPostModel = amityPostCollection.allObjects()
             print("Query all global feed count : \(listAmityPostModel.count)")
             
             /** Map data to post model **/
@@ -102,7 +102,7 @@ class FeedManager {
                 filterPostTypes: nil)
             
             /** Get post by query post option and set observer **/
-            otherUserFeedTokenResult = postRepository.getPosts(queryPostOption).observe { amityPostCollection, change, error in
+            otherUserFeedTokenResult = feedRepository.getUserFeed(userID, sortBy: .lastCreated, includeDeleted: false).observe { amityPostCollection, change, error in
                 if let currentError = error {
                     print(currentError.localizedDescription)
                 } else {
@@ -129,14 +129,19 @@ class FeedManager {
                         if let currentCaption = amityPostModel.data?["text"] as? String {
                             caption = currentCaption
                         }
-
-                        /** Get video post data**/
-                        let videoPostData = amityPostModel.getVideoInfo()
-
-                        /** Get thumbnail of video **/
+                        
+                        /** Get video post data & thumbnail of video **/
+                        var videoPostData: AmityVideoData!
                         var thumbnailPathID: String = ""
-                        if let thumbnailVideoInfo = amityPostModel.data?["thumbnailFileId"] as? String {
-                            thumbnailPathID = thumbnailVideoInfo
+                        if let childrenPosts = amityPostModel.childrenPosts {
+                            if childrenPosts.count > 0 {
+                                if let videoInfo = childrenPosts[0].getVideoInfo() {
+                                    videoPostData = videoInfo
+                                }
+                                if let thumbnailVideoInfo = childrenPosts[0].data?["thumbnailFileId"] as? String {
+                                    thumbnailPathID = thumbnailVideoInfo
+                                }
+                            }
                         }
 
                         return PostModel(

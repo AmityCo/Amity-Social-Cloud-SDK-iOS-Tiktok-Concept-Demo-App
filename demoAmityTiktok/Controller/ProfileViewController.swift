@@ -49,7 +49,7 @@ class ProfileViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         /** Set status bar to default content **/
-//        navigationController?.navigationBar.barStyle = .default
+        navigationController?.navigationBar.barStyle = .default
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         
         /** Check selected user profile **/
@@ -216,6 +216,7 @@ extension ProfileViewController: UICollectionViewDelegate {
         
         /** Set user and amity client to feed per user view controller **/
         vc.user = user
+        vc.selectedCellIndexFromProfile = indexPath
         
         /** Go to feed per user controller by push view controller **/
         navigationController?.pushViewController(vc, animated: true)

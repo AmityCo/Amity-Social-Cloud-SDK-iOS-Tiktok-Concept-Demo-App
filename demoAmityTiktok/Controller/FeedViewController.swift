@@ -7,6 +7,8 @@
 
 import UIKit
 import AmitySDK
+import Alamofire
+import AlamofireImage
 
 class FeedViewController: UIViewController {
     
@@ -48,6 +50,7 @@ class FeedViewController: UIViewController {
         videoFeedCollectionView.delegate = self
         videoFeedCollectionView?.register(UINib(nibName: "VideoCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: VideoCollectionViewCell.identifier)
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         /** Set invalid token for stop observer **/
         print("Set invalid notification token of feed view controller : FeedManager = .globalfeed")
