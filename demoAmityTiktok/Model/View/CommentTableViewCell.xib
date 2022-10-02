@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="commentTableViewCell" rowHeight="277" id="KGk-i7-Jjw" customClass="CommentTableViewCell" customModule="amityTiktok" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="632" height="277"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="632" height="277"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="peI-aa-eh8">
+                        <rect key="frame" x="10" y="10" width="612" height="257"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9f5-n1-HoJ">
+                                <rect key="frame" x="0.0" y="1" width="45" height="43.666666666666671"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="Nrc-aD-NsP"/>
+                                    <constraint firstAttribute="width" constant="45" id="Ugd-6N-RHU"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal">
+                                    <imageReference key="backgroundImage" image="person.circle.fill" catalog="system" renderingMode="hierarchical">
+                                        <hierarchicalColors>
+                                            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color name="LightGreenColor"/>
+                                            <color name="MainGreenColor"/>
+                                        </hierarchicalColors>
+                                    </imageReference>
+                                </state>
+                                <connections>
+                                    <action selector="pressAvatarOrDisplayName:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="rJG-KI-dEW"/>
+                                </connections>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="gi4-DV-MAq" userLabel="Detail">
+                                <rect key="frame" x="49.999999999999972" y="0.0" width="501.33333333333326" height="49"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C1d-nP-Ltn">
+                                        <rect key="frame" x="0.0" y="0.0" width="95" height="57"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Displayname">
+                                            <color key="titleColor" systemColor="secondaryLabelColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="pressAvatarOrDisplayName:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="sRE-3J-MIw"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="comments" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fMQ-3L-jDW" userLabel="Comments">
+                                        <rect key="frame" x="20" y="62" width="72" height="18"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0h" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="euk-Dq-chb" userLabel="Timestamp">
+                                        <rect key="frame" x="92" y="31" width="18" height="18"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="K0t-PI-Ye0" userLabel="Reaction">
+                                <rect key="frame" x="556.33333333333337" y="0.0" width="55.666666666666629" height="22"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s3g-w6-McW" userLabel="Like Button">
+                                        <rect key="frame" x="0.0" y="0.0" width="20.666666666666668" height="22"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="">
+                                            <imageReference key="image" image="heart" catalog="system" renderingMode="hierarchical">
+                                                <hierarchicalColors>
+                                                    <color white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </hierarchicalColors>
+                                            </imageReference>
+                                        </state>
+                                        <connections>
+                                            <action selector="pressLikeButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="GkK-9B-4Jy"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="XXX" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nuf-mI-S3n">
+                                        <rect key="frame" x="25.666666666666629" y="0.0" width="30" height="22"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="peI-aa-eh8" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="CAp-Cv-q9K"/>
+                    <constraint firstItem="peI-aa-eh8" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="FwX-NC-Eqv"/>
+                    <constraint firstAttribute="bottom" secondItem="peI-aa-eh8" secondAttribute="bottom" constant="10" id="G62-JH-I83"/>
+                    <constraint firstAttribute="trailing" secondItem="peI-aa-eh8" secondAttribute="trailing" constant="10" id="bcL-wu-HW1"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="amountReaction" destination="nuf-mI-S3n" id="f91-x6-Wdi"/>
+                <outlet property="avatar" destination="9f5-n1-HoJ" id="CgR-qy-dCB"/>
+                <outlet property="commentDetail" destination="fMQ-3L-jDW" id="mVZ-o2-utI"/>
+                <outlet property="displayName" destination="C1d-nP-Ltn" id="O1x-ej-SZz"/>
+                <outlet property="likeButton" destination="s3g-w6-McW" id="FvH-8Q-Bb6"/>
+                <outlet property="timeStamp" destination="euk-Dq-chb" id="Hag-c4-iI0"/>
+            </connections>
+            <point key="canvasLocation" x="289.23076923076923" y="179.50236966824644"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="heart" catalog="system" width="128" height="107"/>
+        <image name="person.circle.fill" catalog="system" width="128" height="123"/>
+        <namedColor name="LightGreenColor">
+            <color red="0.33700001239776611" green="0.73299998044967651" blue="0.56099998950958252" alpha="0.5" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="MainGreenColor">
+            <color red="0.33700001239776611" green="0.73299998044967651" blue="0.56099998950958252" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

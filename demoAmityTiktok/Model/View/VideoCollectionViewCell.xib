@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="videoCollectionViewCell" id="myu-q3-GWH" customClass="VideoCollectionViewCell" customModule="amityTiktok" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="396" height="776"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="1jT-iA-3b4">
+                <rect key="frame" x="0.0" y="0.0" width="396" height="776"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nmc-8X-ktu">
+                        <rect key="frame" x="0.0" y="0.0" width="396" height="776"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="eZl-Oy-5KG" userLabel="Interaction">
+                        <rect key="frame" x="326" y="540" width="50" height="175"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wt5-OY-c5w">
+                                <rect key="frame" x="0.0" y="-3" width="50" height="51"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="CbR-EN-yU7"/>
+                                    <constraint firstAttribute="height" constant="45" id="Y82-sZ-HOm"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal">
+                                    <imageReference key="backgroundImage" image="person.circle.fill" catalog="system" symbolScale="large" renderingMode="hierarchical">
+                                        <hierarchicalColors>
+                                            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color name="LightGreenColor"/>
+                                            <color name="MainGreenColor"/>
+                                        </hierarchicalColors>
+                                    </imageReference>
+                                </state>
+                                <connections>
+                                    <action selector="pressAvatarOrDisplayName:" destination="myu-q3-GWH" eventType="touchUpInside" id="4AM-3v-yGN"/>
+                                </connections>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="2Rb-Ug-4vZ" userLabel="like">
+                                <rect key="frame" x="10" y="65" width="30" height="45"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wdh-7k-msK">
+                                        <rect key="frame" x="0.0" y="0.0" width="30" height="17.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <imageReference key="backgroundImage" image="heart.fill" catalog="system" renderingMode="hierarchical">
+                                                <hierarchicalColors>
+                                                    <color systemColor="labelColor"/>
+                                                    <color systemColor="secondaryLabelColor"/>
+                                                    <color systemColor="tertiaryLabelColor"/>
+                                                </hierarchicalColors>
+                                            </imageReference>
+                                        </state>
+                                        <buttonConfiguration key="configuration" style="plain">
+                                            <backgroundConfiguration key="background" imageContentMode="scaleAspectFit">
+                                                <imageReference key="image" image="heart.fill" catalog="system" symbolScale="default" renderingMode="hierarchical">
+                                                    <hierarchicalColors>
+                                                        <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color systemColor="secondaryLabelColor"/>
+                                                        <color systemColor="tertiaryLabelColor"/>
+                                                    </hierarchicalColors>
+                                                </imageReference>
+                                            </backgroundConfiguration>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="pressLikeButton:" destination="myu-q3-GWH" eventType="touchUpInside" id="lh3-so-M9m"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="XXX" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MUs-xg-Zfu" userLabel="amount like">
+                                        <rect key="frame" x="0.0" y="27.5" width="30" height="17.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="93N-0S-mDN" userLabel="comment">
+                                <rect key="frame" x="10" y="130" width="30" height="45"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T9J-GE-Kn9">
+                                        <rect key="frame" x="0.0" y="0.0" width="30" height="17.5"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" backgroundImage="message.fill" catalog="system">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <buttonConfiguration key="configuration" style="plain">
+                                            <backgroundConfiguration key="background" imageContentMode="scaleAspectFit">
+                                                <imageReference key="image" image="message.fill" catalog="system" symbolScale="large" renderingMode="hierarchical">
+                                                    <hierarchicalColors>
+                                                        <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color systemColor="secondaryLabelColor"/>
+                                                        <color systemColor="tertiaryLabelColor"/>
+                                                    </hierarchicalColors>
+                                                </imageReference>
+                                            </backgroundConfiguration>
+                                            <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="pressCommentButton:" destination="myu-q3-GWH" eventType="touchUpInside" id="5QB-zH-398"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="XXX" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ea4-TV-5Ck" userLabel="amount comment">
+                                        <rect key="frame" x="0.0" y="27.5" width="30" height="17.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                    </stackView>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="INs-Zf-kEq" userLabel="Detail Video">
+                        <rect key="frame" x="20" y="735" width="356" height="21"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MJE-yN-ZO5">
+                                <rect key="frame" x="0.0" y="0.0" width="104" height="5.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="displayName">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="pressAvatarOrDisplayName:" destination="myu-q3-GWH" eventType="touchUpInside" id="g8y-GI-rhr"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="caption caption caption caption caption caption caption caption caption caption" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bq6-T1-MQb">
+                                <rect key="frame" x="0.0" y="15.5" width="305" height="5.5"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="nmc-8X-ktu" firstAttribute="leading" secondItem="1jT-iA-3b4" secondAttribute="leading" id="4Ar-of-svB"/>
+                    <constraint firstAttribute="bottom" secondItem="INs-Zf-kEq" secondAttribute="bottom" constant="20" id="AJh-mP-4o6"/>
+                    <constraint firstItem="INs-Zf-kEq" firstAttribute="top" secondItem="eZl-Oy-5KG" secondAttribute="bottom" constant="20" id="E6e-qW-X98"/>
+                    <constraint firstItem="INs-Zf-kEq" firstAttribute="leading" secondItem="1jT-iA-3b4" secondAttribute="leading" constant="20" id="KVE-kd-zVr"/>
+                    <constraint firstItem="nmc-8X-ktu" firstAttribute="top" secondItem="1jT-iA-3b4" secondAttribute="top" id="MV9-7e-WSh"/>
+                    <constraint firstAttribute="trailing" secondItem="eZl-Oy-5KG" secondAttribute="trailing" constant="20" id="aKZ-U6-BHu"/>
+                    <constraint firstAttribute="trailing" secondItem="nmc-8X-ktu" secondAttribute="trailing" id="kSU-lc-3pY"/>
+                    <constraint firstAttribute="bottom" secondItem="nmc-8X-ktu" secondAttribute="bottom" id="pcC-rQ-RM7"/>
+                    <constraint firstAttribute="trailing" secondItem="INs-Zf-kEq" secondAttribute="trailing" constant="20" id="uC6-Ke-vBb"/>
+                </constraints>
+            </collectionViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="NhQ-um-2r2"/>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <size key="customSize" width="396" height="776"/>
+            <connections>
+                <outlet property="amountCommentLabel" destination="Ea4-TV-5Ck" id="eK0-2L-9yt"/>
+                <outlet property="amountLikeLabel" destination="MUs-xg-Zfu" id="Rh7-MP-yTR"/>
+                <outlet property="avatar" destination="wt5-OY-c5w" id="aem-El-Hzf"/>
+                <outlet property="captionLabel" destination="bq6-T1-MQb" id="Xfg-Td-AC8"/>
+                <outlet property="commentButton" destination="T9J-GE-Kn9" id="ctY-Zs-EG7"/>
+                <outlet property="displayNameLabel" destination="MJE-yN-ZO5" id="ip8-6X-aEa"/>
+                <outlet property="likeButton" destination="wdh-7k-msK" id="5Yb-Ki-PFZ"/>
+                <outlet property="videoView" destination="nmc-8X-ktu" id="PN8-he-Iay"/>
+            </connections>
+            <point key="canvasLocation" x="-118.84057971014494" y="-4.6875"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="heart.fill" catalog="system" width="128" height="107"/>
+        <image name="message.fill" catalog="system" width="128" height="114"/>
+        <image name="person.circle.fill" catalog="system" width="128" height="123"/>
+        <namedColor name="LightGreenColor">
+            <color red="0.33700001239776611" green="0.73299998044967651" blue="0.56099998950958252" alpha="0.5" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="MainGreenColor">
+            <color red="0.33700001239776611" green="0.73299998044967651" blue="0.56099998950958252" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="tertiaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29803921568627451" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

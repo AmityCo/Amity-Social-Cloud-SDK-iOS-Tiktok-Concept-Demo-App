@@ -1,0 +1,11 @@
+#Ignore workspace
+*.xcworkspace
+
+#Ignore Mac files
+.DS_store
+
+#Ignore some cocoa pod file and folder
+Pods
+Podfile.lock
+
+
