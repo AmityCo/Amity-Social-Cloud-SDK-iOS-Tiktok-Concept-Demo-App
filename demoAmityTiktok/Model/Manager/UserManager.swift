@@ -13,7 +13,6 @@ class UserManager {
     var userRepository: AmityUserRepository!
     var fileRepository: AmityFileRepository!
     private var tokenResult: [AmityNotificationToken] = []
-    private var singleTokenResult: AmityNotificationToken!
     
     var delegate: UserManagerDelegate!
     
@@ -25,63 +24,39 @@ class UserManager {
     }
     
     func getCurrentLoginedUserModel() -> UserModel? {
+        /** Get current logined user by client **/
         if let amityUserModelLiveObj = client?.currentUser {
             /** Add observer when current logined user updated **/
             if delegate != nil {
                 tokenResult.append(amityUserModelLiveObj.observe({ amityUserObj, error in
                     print("Trigger updated from amityUserModelLiveObj observer -> update new amity user model to viewcontroller")
                     if let amityUserModel = amityUserObj.object {
-                        /** Get and set avatar info UIImage **/
-                        var avatarPathURL: String = ""
-                        if let avatarInfo = amityUserModel.getAvatarInfo() {
-                            avatarPathURL = avatarInfo.fileURL
+                        /** Map data to user model **/
+                        let newUserModel = self.mapDataToUserModel(amityUserModel: amityUserModel)
+                        
+                        /** Set observer for get following/follower data if delegate is profile view controller **/
+                        if let profileViewController = self.delegate as? ProfileViewController {
+                            self.getFollowInfo(of: amityUserModel.userId)
                         }
                         
-                        /** Get following/follower data **/
-                        let followerManager = self.userRepository.followManager
-                        var amountMyFollower = 0
-                        var amountMyFollowing = 0
-                        self.singleTokenResult = followerManager.getMyFollowInfo().observeOnce { amityFollowInfo, error in
-                            print("Before | amountMyFollower : \(amountMyFollower) | amountMyFollowing : \(amountMyFollowing)")
-                            if let currentError = error {
-                                print(currentError.localizedDescription)
-                            } else {
-                                let amityFollowInfoObj = amityFollowInfo.object
-                                amountMyFollowing = amityFollowInfoObj?.followingCount ?? 0
-                                amountMyFollower = amityFollowInfoObj?.followersCount ?? 0
-                                
-                                print("After | amountMyFollower : \(amountMyFollower) | amountMyFollowing : \(amountMyFollowing)")
-                            }
-                            
-                            /** Send user model to delegate **/
-                            self.delegate.didGetCurrentLoginedUserModel(userModel: UserModel(userID: amityUserModel.userId, displayname: amityUserModel.displayName ?? amityUserModel.userId, avatarFileURL: avatarPathURL, amountFollowing: amountMyFollowing, amountFollower: amountMyFollower))
-                        }
+                        /** Send user model to delegate **/
+                        self.delegate.didGetCurrentLoginedUserModel(userModel: newUserModel)
                     }
                 }))
             }
 
-            /** Return current logined user **/
+            /** Return current logined user model **/
             if let amityUserModel = amityUserModelLiveObj.object {
-
-                /** Get and set avatar info UIImage **/
-                var avatarPathURL: String = ""
-                if let avatarInfo = amityUserModel.getAvatarInfo() {
-                    avatarPathURL = avatarInfo.fileURL
-                }
+                /** Map data to user model **/
+                let newUserModel = self.mapDataToUserModel(amityUserModel: amityUserModel)
                 
-                /** Get following/follower data **/
-                let followManager = userRepository.followManager
-                let myFollowInfo = followManager.getMyFollowInfo()
-                var amountMyFollower = 0
-                var amountMyFollowing = 0
-                if let myFollowInfoObj = myFollowInfo.object {
-                    amountMyFollower = myFollowInfoObj.followersCount
-                    amountMyFollowing = myFollowInfoObj.followingCount
-                    print("amountMyFollower : \(amountMyFollower) | amountMyFollowing : \(amountMyFollowing)")
+                /** Set observer for get following/follower data if delegate is profile view controller **/
+                if let profileViewController = delegate as? ProfileViewController {
+                    self.getFollowInfo(of: amityUserModel.userId)
                 }
                 
                 /** Return user model **/
-                return UserModel(userID: amityUserModel.userId, displayname: amityUserModel.displayName ?? amityUserModel.userId, avatarFileURL: avatarPathURL, amountFollowing: amountMyFollowing, amountFollower: amountMyFollower)
+                return newUserModel
             }
         }
         
@@ -91,32 +66,94 @@ class UserManager {
     func getUserModelByUserID(userID: String) -> UserModel? {
         /** Get user by user ID in Amity **/
         let resultAmityUserModel = userRepository.getUser(userID)
+        
+        /** Add observer when other user updated **/
+        if delegate != nil {
+            tokenResult.append(resultAmityUserModel.observe { amityUserObj, error in
+                if let amityUserModel = amityUserObj.object {
+                    /** Map data to user model **/
+                    let newUserModel = self.mapDataToUserModel(amityUserModel: amityUserModel)
+                    
+                    /** Set observer for get following/follower data if delegate is profile view controller **/
+                    if let profileViewController = self.delegate as? ProfileViewController {
+                        self.getFollowInfo(of: amityUserModel.userId)
+                    }
+                    
+                    /** Send user model to delegate **/
+                    self.delegate.didGetUserModelByUserID(userModel: newUserModel)
+                }
+            })
+        }
+        
+        /** Return user model **/
         if let amityUserModel = resultAmityUserModel.object {
-            /** Get and set avatar info UIImage **/
-            var avatarUIImage: UIImage!
-            var avatarPathURL: String = ""
-            if let avatarInfo = amityUserModel.getAvatarInfo() {
-                avatarPathURL = avatarInfo.fileURL
-            }
+            /** Map data to user model **/
+            let newUserModel = self.mapDataToUserModel(amityUserModel: amityUserModel)
             
-            /** Get following/follower data **/
-            let followManager = userRepository.followManager
-            let userFollowInfo = followManager.getUserFollowInfo(withUserId: amityUserModel.userId)
-            var amountUserFollower = 0
-            var amountUserFollowing = 0
-            if let userFollowInfoObj = userFollowInfo.object {
-                amountUserFollower = userFollowInfoObj.followersCount
-                amountUserFollowing = userFollowInfoObj.followingCount
-                print("amountUserFollower : \(amountUserFollower) | amountUserFollowing : \(amountUserFollowing)")
+            /** Set observer for get following/follower data if delegate is profile view controller **/
+            if let profileViewController = delegate as? ProfileViewController {
+                self.getFollowInfo(of: amityUserModel.userId)
             }
             
             /** Return user model **/
-            return UserModel(userID: amityUserModel.userId, displayname: amityUserModel.displayName ?? amityUserModel.userId, avatarFileURL: avatarPathURL, amountFollowing: amountUserFollowing, amountFollower: amountUserFollower)
+            return newUserModel
         }
         
         return nil
     }
     
+    private func mapDataToUserModel(amityUserModel: AmityUser) -> UserModel {
+        /** Get and set avatar info UIImage **/
+        var avatarPathURL: String = ""
+        if let avatarInfo = amityUserModel.getAvatarInfo() {
+            avatarPathURL = avatarInfo.fileURL
+        }
+        
+        /** Return user model **/
+        return UserModel(userID: amityUserModel.userId, displayname: amityUserModel.displayName ?? amityUserModel.userId, avatarFileURL: avatarPathURL)
+    }
+    
+    private func getFollowInfo(of userID: String?) {
+        let followManager = userRepository.followManager
+        var amountFollower = 0
+        var amountFollowing = 0
+        
+        if let otherUserID = userID {
+            /** Case : Get follow info of other user ID **/
+            let otherUserFollowInfo = followManager.getUserFollowInfo(withUserId: otherUserID)
+            tokenResult.append(otherUserFollowInfo.observe({ amityUserFollowInfo, error in
+                /** Check error and get follow info**/
+                if let currentError = error {
+                    print(currentError.localizedDescription)
+                } else {
+                    let amityUserFollowInfoObj = amityUserFollowInfo.object
+                    amountFollowing = amityUserFollowInfoObj?.followingCount ?? 0
+                    amountFollower = amityUserFollowInfoObj?.followersCount ?? 0
+                }
+                
+                /** Send follow info to view controller  and update to model by delegate **/
+                self.delegate.didGetFollowInfo(amountFollowing: amountFollowing, amountFollower: amountFollower)
+            }))
+            
+        } else {
+            /** Case : Get follow info of mine **/
+            let myFollowInfo = followManager.getMyFollowInfo()
+            tokenResult.append(myFollowInfo.observe({ amityMyFollowInfo, error in
+                /** Check error and get follow info**/
+                if let currentError = error {
+                    print(currentError.localizedDescription)
+                } else {
+                    let amityMyFollowInfoObj = amityMyFollowInfo.object
+                    amountFollowing = amityMyFollowInfoObj?.followingCount ?? 0
+                    amountFollower = amityMyFollowInfoObj?.followersCount ?? 0
+                }
+                
+                /** Send follow info to view controller  and update to model by delegate **/
+                self.delegate.didGetFollowInfo(amountFollowing: amountFollowing, amountFollower: amountFollower)
+            }))
+        }
+    }
+     
     private func getAvatarFromAmityUserModel(amityUserModel: AmityUser) -> UIImage? {
         if let avatarAmityImageData = amityUserModel.getAvatarInfo() {
             return getAvatarFromAmityImageData(avatarAmityImageData: avatarAmityImageData)
@@ -243,7 +280,7 @@ class UserManager {
         var isFollow = false
         
         print("checkCurrentLoginedUserIsFollowUser \(otherUserID)")
-        singleTokenResult = myFollowing.observe { amityFollowRelationShipCollection, change, error in
+        tokenResult.append(myFollowing.observe { amityFollowRelationShipCollection, change, error in
             let listAmityFollowRelationShip = amityFollowRelationShipCollection.allObjects()
             for data in listAmityFollowRelationShip {
                 if data.targetUserId == otherUserID {
@@ -252,7 +289,7 @@ class UserManager {
             }
             
             self.delegate.didCheckCurrentLoginedUserIsFollowUser(isFollow: isFollow)
-        }
+        })
     }
     
     func autoAcceptAllFollowingRequest() {
@@ -281,5 +318,6 @@ protocol UserManagerDelegate {
     func didSearchUserByDisplayName(listUserModel: [UserModel])
     func didSetNewAvatar(newImage: UIImage)
     func didFollowOrUnFollowUser(isFollow: Bool)
+    func didGetFollowInfo(amountFollowing: Int, amountFollower: Int)
     func didCheckCurrentLoginedUserIsFollowUser(isFollow: Bool)
 }

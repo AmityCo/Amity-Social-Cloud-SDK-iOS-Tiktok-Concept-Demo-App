@@ -78,6 +78,7 @@ extension FeedViewController: FeedManagerDelegate {
 
 extension FeedViewController: UserManagerDelegate {
     /** Don't use **/
+    func didGetFollowInfo(amountFollowing: Int, amountFollower: Int) {}
     func didCheckCurrentLoginedUserIsFollowUser(isFollow: Bool) {}
     func didGetUserModelByUserID(userModel: UserModel) {}
     func didGetCurrentLoginedUserModel(userModel: UserModel) {}
@@ -96,8 +97,8 @@ extension FeedViewController: VideoCollectionViewCellDelegate {
             let vc = storyboard.instantiateViewController(withIdentifier: "profile") as! ProfileViewController
             
             /** Set user and amity client to comment view controller **/
-            vc.user = post.owner
-            vc.currentAmityClient = currentAmityClient
+//            vc.user = post.owner
+            vc.selectedUserID = post.owner.userID
             
             navigationController?.pushViewController(vc, animated: true)
         }

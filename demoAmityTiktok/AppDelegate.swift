@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
         
         /** Init Connect to Amity SDK **/
-        guard let client = try? AmityClient(apiKey: "xxxxx", httpUrl: AmityRegionalEndpoint.SG, socketUrl: AmityRegionalEndpoint.SG) else {
+        guard let client = try? AmityClient(apiKey: "XXXXXX", httpUrl: AmityRegionalEndpoint.SG, socketUrl: AmityRegionalEndpoint.SG) else {
             return false
         }
         

@@ -23,6 +23,7 @@ class ProfileViewController: UIViewController {
     
     var currentAmityClient: AmityClient!
     var user: UserModel!
+    var selectedUserID: String!
     var userManager: UserManager!
     var feedManager: FeedManager!
     var listPostOfUser: [PostModel] = []
@@ -33,14 +34,9 @@ class ProfileViewController: UIViewController {
         /** Set custom avatar design **/
         avatar.layer.cornerRadius = avatar.frame.width / 2
         
-        /** Check amity client **/
-        if currentAmityClient == nil {
-            print("Current Amity client is nil -> start get new connected amity client")
-            
-            /** Get registered client from app delegate **/
-            if let newConnectedClient = Utilities.Amity.getConnectedClient() {
-                currentAmityClient = newConnectedClient
-            }
+        /** Get registered client from app delegate **/
+        if let newConnectedClient = Utilities.Amity.getConnectedClient() {
+            currentAmityClient = newConnectedClient
         }
         
         /** Init Manager **/
@@ -48,23 +44,26 @@ class ProfileViewController: UIViewController {
         feedManager = FeedManager(amityClient: currentAmityClient, delegate: self)
 
         /** Check selected user profile **/
-        if user == nil {
-            /** Case : press "Me" on tab bar for get current logined user profile**/
+        if selectedUserID == nil {
+            /** Case : press "Me" on tab bar for get current logined user profile **/
             /** Set user profile to current logined user **/
             user = userManager.getCurrentLoginedUserModel()
-            
+
             /** Set follow button to hidden **/
             followButton.isHidden = true
         } else {
             /** Case : press avatar or displayname on video post or comment for get other user profile **/
             /** Set edit profile button to hidden **/
             editProfileButton.isHidden = true
-            
+
             /** Set tab bar to hidden **/
             tabBarController?.tabBar.isHidden = true
-            
+
+            /** Get user model for update follow info **/
+            user = userManager.getUserModelByUserID(userID: selectedUserID)
+
             /** Set follow button **/
-            userManager.checkCurrentLoginedUserIsFollowUser(otherUserID: user.userID)
+            userManager.checkCurrentLoginedUserIsFollowUser(otherUserID: selectedUserID)
         }
         
         /** Set delegate **/
@@ -72,7 +71,7 @@ class ProfileViewController: UIViewController {
         postOnProfileCollectionView.delegate = self
         
         /** Get post of user **/
-        feedManager.queryFeedByUserID(user.userID)
+        feedManager.queryFeedByUserID(selectedUserID ?? user.userID)
         
         /** Set user profile data to UI **/
         setUserProfileDataToUI()
@@ -153,6 +152,17 @@ extension ProfileViewController: UserManagerDelegate {
         }
     }
     
+    func didGetFollowInfo(amountFollowing: Int, amountFollower: Int) {
+        /** Update follow info to user model **/
+        user.amountFollowing = amountFollowing
+        user.amountFollower = amountFollower
+        
+        print("amountFollower : \(amountFollower) | amountFollowing : \(amountFollowing)")
+        
+        /** Set new user profile data to UI when user updated **/
+        setUserProfileDataToUI()
+    }
+    
     /** Don't use **/
     func didGetUserModelByUserID(userModel: UserModel) {}
     func didSetNewAvatar(newImage: UIImage) {}
@@ -171,7 +181,8 @@ extension ProfileViewController: FeedManagerDelegate {
 
 extension ProfileViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return listPostOfUser.count
+//        return listPostOfUser.count
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

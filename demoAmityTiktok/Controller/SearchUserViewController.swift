@@ -63,6 +63,7 @@ extension SearchUserViewController: UserManagerDelegate {
     }
     
     /** Don't use **/
+    func didGetFollowInfo(amountFollowing: Int, amountFollower: Int) {}
     func didSetNewAvatar(newImage: UIImage) {}
     func didCheckCurrentLoginedUserIsFollowUser(isFollow: Bool) {}
     func didGetUserModelByUserID(userModel: UserModel) {}
@@ -120,8 +121,8 @@ extension SearchUserViewController: UITableViewDelegate {
         let vc = storyboard.instantiateViewController(withIdentifier: "profile") as! ProfileViewController
         
         /** Set user and amity client to comment view controller **/
-        vc.user = userModel
-        vc.currentAmityClient = currentAmityClient
+//        vc.user = userModel
+        vc.selectedUserID = userModel.userID
         
         /** Go to profile view controller **/
         navigationController?.pushViewController(vc, animated: true)

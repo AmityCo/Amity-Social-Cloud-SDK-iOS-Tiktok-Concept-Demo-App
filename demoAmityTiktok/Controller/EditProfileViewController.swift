@@ -178,13 +178,12 @@ extension EditProfileViewController: EditProfileViewControllerDelegate {
 
 /** Use UserManagerDelegate for add UIImagepickerController & set new avatar **/
 extension EditProfileViewController: UserManagerDelegate {
-    
-    
     func didSetNewAvatar(newImage: UIImage) {
         avatar.image = newImage
     }
     
     /** Don't use **/
+    func didGetFollowInfo(amountFollowing: Int, amountFollower: Int) {}
     func didCheckCurrentLoginedUserIsFollowUser(isFollow: Bool) {}
     func didGetUserModelByUserID(userModel: UserModel) {}
     func didGetCurrentLoginedUserModel(userModel: UserModel) {}

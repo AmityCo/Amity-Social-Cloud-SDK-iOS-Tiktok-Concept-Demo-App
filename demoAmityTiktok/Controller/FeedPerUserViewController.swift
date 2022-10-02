@@ -81,6 +81,7 @@ extension FeedPerUserViewController: FeedManagerDelegate {
 extension FeedPerUserViewController: UserManagerDelegate {
     /** Don't use **/
     func didCheckCurrentLoginedUserIsFollowUser(isFollow: Bool) {}
+    func didGetFollowInfo(amountFollowing: Int, amountFollower: Int) {}
     func didGetUserModelByUserID(userModel: UserModel) {}
     func didGetCurrentLoginedUserModel(userModel: UserModel) {}
     func didSearchUserByDisplayName(listUserModel: [UserModel]) {}

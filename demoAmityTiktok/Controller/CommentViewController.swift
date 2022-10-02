@@ -83,8 +83,8 @@ extension CommentViewController: CommentTableViewCellDelegate {
         let vc = storyboard.instantiateViewController(withIdentifier: "profile") as! ProfileViewController
         
         /** Set user and amity client to comment view controller **/
-        vc.user = comment.owner
-        vc.currentAmityClient = currentAmityClient
+//        vc.user = comment.owner
+        vc.selectedUserID = comment.owner.userID
         
         /** Go to profile view controller **/
         navigationController?.pushViewController(vc, animated: true)
