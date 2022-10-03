@@ -57,11 +57,16 @@ class FeedPerUserViewController: UIViewController {
         /** Set invalid token for stop observer **/
         print("Set invalid notification token of feed per user view controller : FeedManager = .otherUserFeed")
         feedManager.setInvalidNotificationToken(typeToken: .otherUserFeed)
+        
+        /** Set status bar to default content **/
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.navigationBar.tintColor = UIColor(named: "MainGreenColor")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         /** Set status bar to light content **/
         navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.tintColor = .white
         
         /** Load feed **/
         loadFeed()

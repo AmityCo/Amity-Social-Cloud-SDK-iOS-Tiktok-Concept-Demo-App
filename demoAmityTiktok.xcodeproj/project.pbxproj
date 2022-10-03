@@ -39,6 +39,8 @@
 		E52BF52428E98AB20093BE62 /* CommentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52BF52128E98AB20093BE62 /* CommentManager.swift */; };
 		E52BF52528E98AB20093BE62 /* FeedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52BF52228E98AB20093BE62 /* FeedManager.swift */; };
 		E52BF52628E98AB20093BE62 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52BF52328E98AB20093BE62 /* UserManager.swift */; };
+		E585C35528EAB551009BD379 /* VideoThumbnailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E585C35328EAB551009BD379 /* VideoThumbnailCollectionViewCell.swift */; };
+		E585C35628EAB551009BD379 /* VideoThumbnailCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E585C35428EAB551009BD379 /* VideoThumbnailCollectionViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +80,8 @@
 		E52BF52128E98AB20093BE62 /* CommentManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentManager.swift; sourceTree = "<group>"; };
 		E52BF52228E98AB20093BE62 /* FeedManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedManager.swift; sourceTree = "<group>"; };
 		E52BF52328E98AB20093BE62 /* UserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		E585C35328EAB551009BD379 /* VideoThumbnailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoThumbnailCollectionViewCell.swift; sourceTree = "<group>"; };
+		E585C35428EAB551009BD379 /* VideoThumbnailCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoThumbnailCollectionViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +171,8 @@
 				E52BF50928E989920093BE62 /* UserTableViewCell.xib */,
 				E52BF50F28E989930093BE62 /* VideoCollectionViewCell.swift */,
 				E52BF50A28E989920093BE62 /* VideoCollectionViewCell.xib */,
+				E585C35328EAB551009BD379 /* VideoThumbnailCollectionViewCell.swift */,
+				E585C35428EAB551009BD379 /* VideoThumbnailCollectionViewCell.xib */,
 			);
 			name = View;
 			path = Model/View;
@@ -267,6 +273,7 @@
 				E52BF51628E989930093BE62 /* CommentTableViewCell.xib in Resources */,
 				E52BF4E228E986230093BE62 /* Assets.xcassets in Resources */,
 				E52BF4E028E986210093BE62 /* Main.storyboard in Resources */,
+				E585C35628EAB551009BD379 /* VideoThumbnailCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +348,7 @@
 				E52BF51728E989930093BE62 /* VideoCollectionViewCell.swift in Sources */,
 				E52BF4FF28E989690093BE62 /* CreatePostViewController.swift in Sources */,
 				E52BF50128E989690093BE62 /* FeedViewController.swift in Sources */,
+				E585C35528EAB551009BD379 /* VideoThumbnailCollectionViewCell.swift in Sources */,
 				E52BF52528E98AB20093BE62 /* FeedManager.swift in Sources */,
 				E52BF4DB28E986210093BE62 /* SceneDelegate.swift in Sources */,
 			);

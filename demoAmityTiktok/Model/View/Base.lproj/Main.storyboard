@@ -8,7 +8,6 @@
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
-        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -395,23 +394,14 @@
                             </stackView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="iLw-A5-5v1" userLabel="Post Collection View">
                                 <rect key="frame" x="0.0" y="348" width="414" height="465"/>
-                                <color key="backgroundColor" name="DoubleLightGreenColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="Osh-sH-sYJ">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" reuseIdentifier="postVideoCell" id="O7J-P0-rD3">
-                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="PsS-ZA-e8c">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </collectionViewCellContentView>
-                                    </collectionViewCell>
-                                </cells>
+                                <cells/>
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="XC9-ne-mEC"/>
@@ -426,7 +416,9 @@
                             <constraint firstItem="XC9-ne-mEC" firstAttribute="trailing" secondItem="iLw-A5-5v1" secondAttribute="trailing" id="nS7-YU-tOU"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Profile" id="fIF-Jd-vTU"/>
+                    <navigationItem key="navigationItem" title="Profile" leftItemsSupplementBackButton="YES" id="fIF-Jd-vTU">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="Nvj-Vj-pEc"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="amountFollowerLabel" destination="15e-ap-xHC" id="dLp-oW-9vm"/>
                         <outlet property="amountFollowingLabel" destination="dSd-UD-qKg" id="yQx-cZ-LDU"/>
@@ -437,6 +429,7 @@
                         <outlet property="postOnProfileCollectionView" destination="iLw-A5-5v1" id="Sak-5R-2yi"/>
                         <outlet property="userIdLabel" destination="11y-kg-bpl" id="ooo-Oi-rsU"/>
                         <segue destination="TcZ-JD-E3a" kind="show" identifier="goToEditProfile" id="p0q-Ue-Rqd"/>
+                        <segue destination="RMR-pH-8bC" kind="show" identifier="goToFeedPerUser" id="XMW-MB-zDY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Xh-hN-kcc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -494,7 +487,9 @@
                             <constraint firstItem="7k5-hn-JBM" firstAttribute="bottom" secondItem="SOh-Q2-o6Z" secondAttribute="bottom" id="xqQ-7L-DLT"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Edit profile" id="WLV-HN-HVB"/>
+                    <navigationItem key="navigationItem" title="Edit profile" leftItemsSupplementBackButton="YES" id="WLV-HN-HVB">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="3e2-yh-L76"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="avatar" destination="kNt-Ad-WiY" id="MIv-8m-p01"/>
                         <outlet property="profileDataTableView" destination="7k5-hn-JBM" id="BXx-8s-Sqd"/>
@@ -815,7 +810,9 @@
                             <constraint firstItem="ffo-ig-kK8" firstAttribute="bottom" secondItem="lZV-K0-NC2" secondAttribute="bottom" id="o1X-ag-xkx"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="i7N-As-xhr"/>
+                    <navigationItem key="navigationItem" id="i7N-As-xhr">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="7g6-PN-3xS"/>
+                    </navigationItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="videoFeedCollectionView" destination="ffo-ig-kK8" id="C99-ev-YhO"/>
@@ -826,6 +823,7 @@
             <point key="canvasLocation" x="3564" y="1533"/>
         </scene>
     </scenes>
+    <color key="tintColor" name="MainGreenColor"/>
     <resources>
         <image name="amityLogo" width="640" height="360"/>
         <image name="house.fill" catalog="system" width="128" height="106"/>
@@ -834,9 +832,6 @@
         <image name="person.circle.fill" catalog="system" width="128" height="121"/>
         <image name="plus.rectangle.fill" catalog="system" width="128" height="93"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
-        <namedColor name="DoubleLightGreenColor">
-            <color red="0.33700001239776611" green="0.73299998044967651" blue="0.56099998950958252" alpha="0.24899999797344208" colorSpace="custom" customColorSpace="displayP3"/>
-        </namedColor>
         <namedColor name="LightGreenColor">
             <color red="0.33700001239776611" green="0.73299998044967651" blue="0.56099998950958252" alpha="0.5" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>

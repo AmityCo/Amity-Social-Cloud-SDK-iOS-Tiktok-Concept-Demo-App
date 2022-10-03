@@ -31,9 +31,6 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        /** Set custom avatar design **/
-        avatar.layer.cornerRadius = avatar.frame.width / 2
-        
         /** Get registered client from app delegate **/
         if let newConnectedClient = Utilities.Amity.getConnectedClient() {
             currentAmityClient = newConnectedClient
@@ -46,6 +43,9 @@ class ProfileViewController: UIViewController {
         /** Set delegate **/
         postOnProfileCollectionView.dataSource = self
         postOnProfileCollectionView.delegate = self
+        
+        /** Register custom design of video thumbnail **/
+        postOnProfileCollectionView.register(UINib(nibName: "VideoThumbnailCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "videoThumbnailCollectionViewCell")
     }
     override func viewWillAppear(_ animated: Bool) {
         /** Set status bar to default content **/
@@ -196,13 +196,12 @@ extension ProfileViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = postOnProfileCollectionView.dequeueReusableCell(withReuseIdentifier: "postVideoCell", for: indexPath)
+        let cell = postOnProfileCollectionView.dequeueReusableCell(withReuseIdentifier: "videoThumbnailCollectionViewCell", for: indexPath) as! VideoThumbnailCollectionViewCell
         let postData = listPostOfUser[indexPath.row]
-        Alamofire.request(postData.thumbnailPathURL!).responseImage { response in
-            if case .success(let image) = response.result {
-                cell.contentView.addSubview(UIImageView(image: image))
-            }
-        }
+        print("Init cell index \(indexPath.row) with URL : \(postData.thumbnailPathURL!)")
+        
+        cell.configure(post: postData)
+
         return cell
     }
     
