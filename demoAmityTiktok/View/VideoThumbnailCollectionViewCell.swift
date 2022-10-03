@@ -21,9 +21,7 @@ class VideoThumbnailCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         /** Set video thumbnail to nil **/
-        if videoThumbnail != nil {
-            videoThumbnail.image = nil
-        }
+        videoThumbnail.image = nil
     }
     
     func configure(post: PostModel) {

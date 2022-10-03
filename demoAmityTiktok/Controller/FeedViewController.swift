@@ -20,6 +20,7 @@ class FeedViewController: UIViewController {
     private var isVideoPaused: Bool = false
     private var feedManager: FeedManager!
     private var userManager: UserManager!
+    private var amountUpdateDataLeftWhenOpen: Int = 2
     
     private var doubleTapAction: UITapGestureRecognizer!
     
@@ -60,6 +61,9 @@ class FeedViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         /** Set status bar to light content **/
         navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
         
         /** Set tab bar to show **/
         tabBarController?.tabBar.isHidden = false
@@ -81,6 +85,14 @@ extension FeedViewController: FeedManagerDelegate {
     func didQueryGlobalFeed(listPostModel: [PostModel]) {
         videoFeeds = listPostModel
         videoFeedCollectionView.reloadData()
+        
+        if amountUpdateDataLeftWhenOpen == 1 {
+            if videoFeeds.count > 0 {
+                videoFeedCollectionView.scrollToItem(at: IndexPath(indexes: [0,0]), at: .top, animated: false)
+            }
+        }
+        
+        amountUpdateDataLeftWhenOpen -= 1
     }
 }
 

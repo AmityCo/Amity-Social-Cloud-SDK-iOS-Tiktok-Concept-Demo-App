@@ -84,7 +84,7 @@ class ProfileViewController: UIViewController {
         setUserProfileDataToUI()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         /** Set invalid token for stop observer **/
         print("Set invalid notification token of profile view controller : UserManager = currentLoginedUser, otheruser, checkFollowStatus | FeedManager = otherUserFeed")
         userManager.setInvalidNotificationToken(typeToken: .currentLoginedUser)

@@ -51,7 +51,7 @@ class FeedManager {
                 }
                 
                 /** Get caption **/
-                var caption = "<no caption>"
+                var caption = ""
                 if let currentCaption = amityPostModel.data?["text"] as? String {
                     caption = currentCaption
                 }
@@ -93,14 +93,6 @@ class FeedManager {
     func queryFeedByUserID(_ userID: String) {
         /** Get user model of post owner **/
         if let postOwner = userManager.getUserModelByUserID(userID: userID, isGetFollowInfo: false) {
-            /** Set query post option **/
-            let queryPostOption = AmityPostQueryOptions(
-                targetType: .user,
-                targetId: userID,
-                sortBy: .lastCreated,
-                deletedOption: .notDeleted,
-                filterPostTypes: nil)
-            
             /** Get post by query post option and set observer **/
             otherUserFeedTokenResult = feedRepository.getUserFeed(userID, sortBy: .lastCreated, includeDeleted: false).observe { amityPostCollection, change, error in
                 if let currentError = error {
@@ -125,7 +117,7 @@ class FeedManager {
                         }
 
                         /** Get caption **/
-                        var caption = "<no caption>"
+                        var caption = ""
                         if let currentCaption = amityPostModel.data?["text"] as? String {
                             caption = currentCaption
                         }

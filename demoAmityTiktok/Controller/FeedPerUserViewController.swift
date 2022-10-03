@@ -21,6 +21,7 @@ class FeedPerUserViewController: UIViewController {
     private var userManager: UserManager!
     var user: UserModel!
     var selectedCellIndexFromProfile: IndexPath!
+    private var amountUpdateDataLeftWhenOpen: Int = 2
     
     private var doubleTapAction: UITapGestureRecognizer!
     
@@ -67,6 +68,9 @@ class FeedPerUserViewController: UIViewController {
         /** Set status bar to light content **/
         navigationController?.navigationBar.barStyle = .black
         navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
         
         /** Load feed **/
         loadFeed()
@@ -82,20 +86,25 @@ class FeedPerUserViewController: UIViewController {
             videoFeedCollectionView.scrollToItem(at: selectedCellIndexFromProfile, at: .top, animated: false)
         }
     }
-    
 }
 
 extension FeedPerUserViewController: FeedManagerDelegate {
     func didQueryFeedByUserID(listPostModel: [PostModel]) {
         /** Set new video feeds **/
         videoFeeds = listPostModel
+        print("videoFeeds count: \(videoFeeds.count)")
         
         /** Reload collection view for update data**/
         videoFeedCollectionView.reloadData()
-
-        /** Go to cell selected by index path **/
-        goToPostSelected()
-            
+        
+        /** Check amount update data left when open **/
+        if amountUpdateDataLeftWhenOpen == 1 {
+            /** Scroll to select video post **/
+            goToPostSelected()
+        }
+        
+        amountUpdateDataLeftWhenOpen -= 1
+        
     }
     
     func didQueryGlobalFeed(listPostModel: [PostModel]) {}
@@ -167,8 +176,8 @@ extension FeedPerUserViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let postModel = videoFeeds[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "videoCollectionViewCell", for: indexPath) as! VideoCollectionViewCell
-        
         print("Init cell index \(indexPath.row)")
+        
         /** Set configure video and delegate **/
         cell.configure(model: postModel, feedManager: feedManager)
         cell.cellDelegate = self
@@ -239,6 +248,6 @@ extension FeedPerUserViewController: UICollectionViewDelegateFlowLayout {
     
     /** Set size video cell of cellection view **/
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: videoFeedCollectionView.frame.size.width, height: videoFeedCollectionView.frame.size.height)
+        return CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height)
     }
 }
