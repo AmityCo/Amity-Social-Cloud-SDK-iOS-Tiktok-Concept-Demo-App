@@ -25,7 +25,7 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="eZl-Oy-5KG" userLabel="Interaction">
-                        <rect key="frame" x="326" y="540" width="50" height="175"/>
+                        <rect key="frame" x="336" y="540" width="50" height="175"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wt5-OY-c5w">
                                 <rect key="frame" x="0.0" y="-3" width="50" height="51"/>
@@ -152,7 +152,7 @@
                     <constraint firstItem="INs-Zf-kEq" firstAttribute="top" secondItem="eZl-Oy-5KG" secondAttribute="bottom" constant="20" id="E6e-qW-X98"/>
                     <constraint firstItem="INs-Zf-kEq" firstAttribute="leading" secondItem="1jT-iA-3b4" secondAttribute="leading" constant="20" id="KVE-kd-zVr"/>
                     <constraint firstItem="nmc-8X-ktu" firstAttribute="top" secondItem="1jT-iA-3b4" secondAttribute="top" id="MV9-7e-WSh"/>
-                    <constraint firstAttribute="trailing" secondItem="eZl-Oy-5KG" secondAttribute="trailing" constant="20" id="aKZ-U6-BHu"/>
+                    <constraint firstAttribute="trailing" secondItem="eZl-Oy-5KG" secondAttribute="trailing" constant="10" id="aKZ-U6-BHu"/>
                     <constraint firstAttribute="trailing" secondItem="nmc-8X-ktu" secondAttribute="trailing" id="kSU-lc-3pY"/>
                     <constraint firstAttribute="bottom" secondItem="nmc-8X-ktu" secondAttribute="bottom" id="pcC-rQ-RM7"/>
                     <constraint firstAttribute="trailing" secondItem="INs-Zf-kEq" secondAttribute="trailing" constant="20" id="uC6-Ke-vBb"/>

@@ -253,6 +253,6 @@ extension FeedViewController: UICollectionViewDelegateFlowLayout {
     
     /** Set size video cell of cellection view **/
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: videoFeedCollectionView.frame.size.width, height: videoFeedCollectionView.frame.size.height)
+        return CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height)
     }
 }
